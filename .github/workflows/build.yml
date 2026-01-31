@@ -18,11 +18,14 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Build with Gradle 8 (Fix Loom + Gradle 9 crash)
-        run: |
-          gradle wrapper --gradle-version 8.10.2
-          chmod +x gradlew
-          ./gradlew build
+      # This forces Gradle 8.10.2 instead of the runner's Gradle 9.x
+      - name: Set up Gradle 8.10.2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.10.2
+
+      - name: Build
+        run: gradle build
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
